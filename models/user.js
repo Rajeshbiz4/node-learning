@@ -1,19 +1,22 @@
-'use strict';
-var bcrypt = require('bcryptjs');
+// grab the things we need
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-module.exports = function(sequelize, DataTypes) {
-  var User = sequelize.define('User', {
-    Username: {
-      type: DataTypes.STRING
+// create a schema
+var userSchema = new Schema({
+  name: { type: String, required: true, unique: true },
+  mobile: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  district: { type: String, required: true, unique: true },
+  taluka: { type: String, required: true, unique: true },
+  village: { type: String, required: true, unique: true },
+  created_at: Date,
+  updated_at: Date,
+});
 
-    },
-    FirstName: {
-      type: DataTypes.STRING
-    },
-    LastName: {
-      type: DataTypes.STRING
-    }
-  });
+// the schema is useless so far
+// we need to create a model using it
+var customers = mongoose.model('customers', userSchema);
 
-  return User;
-};
+// make this available to our users in our Node applications
+module.exports = customers;
