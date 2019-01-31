@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var MongoClient = require('mongodb').MongoClient;
 var myLogModule = require('../../utils/logger');
+var User = require('../../models/user.js');
 var url = 'mongodb://127.0.0.1:27017/';
 
 // Create new user
@@ -19,12 +20,13 @@ router.post('/create', function (req, res) {
     }
     myLogModule.info('payload -- ' + JSON.stringify(payload))
     var myobj = payload
-    dbo.collection("customers").insertOne(myobj, function (err, res) {
+    dbo.collection("customers").insertOne(myobj, function (err, result) {
       if (err) {
-        myLogModule.error('error while user creating')
+        myLogModule.error('error')
+        res.status(400).send({ message: 'error', data: err })
       } else {
-        myLogModule.error('error while user creating')
-        res.send('document inserted')
+        myLogModule.info('Sucess')
+        res.status(200).send({ message: 'document inserted', data: result })
       }
       db.close();
     });
