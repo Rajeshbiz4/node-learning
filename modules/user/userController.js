@@ -1,10 +1,13 @@
 var express = require('express')
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
 var router = express.Router()
 var MongoClient = require('mongodb').MongoClient;
 var myLogModule = require('../../utils/logger');
 var User = require('../../models/user.js');
 var url = 'mongodb://127.0.0.1:27017/';
 var mypassModule = require('../../utils/utils');
+var ObjectID = require('mongodb').ObjectID;
 // mongodb://localhost:27017
 
 // Create new user
@@ -80,7 +83,7 @@ router.put('/update', function (req, res) {
   myLogModule.info('UserController API-UserList(user/update)')
   MongoClient.connect(url, function (err, db) {
     var payload = {
-      "_id": req.body.id
+      "_id": ObjectID(req.body.id)
     }
     if (err) throw err;
     var dbo = db.db("mydb");
@@ -116,6 +119,51 @@ router.delete('/delete', function (req, res) {
       if (err) throw err;
       myLogModule.info('User deleted sucessfully')
       res.send("1 document deleted")
+      db.close();
+    });
+  });
+})
+
+
+// Authenticate user - Login API
+router.post('/authenticate', function (req, res) {
+  myLogModule.info('UserController API-authenticate')
+  MongoClient.connect(url, function (err, db) {
+    var payload = {
+      "mobile": req.body.mobile
+    }
+    if (err) throw err;
+    var dbo = db.db("mydb");
+    var myquery = payload
+    dbo.collection("customers").findOne(myquery, function (err, result) {
+      if (err) throw err;
+      if(req.body.password !== result.password){
+        response = { "error": true, "message": 'Authentication failed. Invalid user or password.' };
+        return res.send(response);
+      } else {
+        res.status(200).send( { data: result , token: jwt.sign({ mobile: result.mobile, firstName: result.firstName, lastName: result.lastName, password: result.password, _id: result._id }, 'RESTFULAPIs') });
+      }
+      db.close();
+    });
+  });
+})
+
+
+// change password
+router.put('/change-password', function (req, res) {
+  myLogModule.info('UserController API-change-password(user/update)')
+  MongoClient.connect(url, function (err, db) {
+    var payload = {
+      "_id": ObjectID(req.body.id)
+    }
+    if (err) throw err;
+    var dbo = db.db("mydb");
+    var myquery = payload
+    var newvalues = { $set: { password: req.body.password } }
+    dbo.collection("customers").updateOne(myquery, newvalues, function (err, result) {
+      if (err) throw err;
+      myLogModule.info('password update sucessfully');
+      res.send(result);
       db.close();
     });
   });

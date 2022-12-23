@@ -9,6 +9,10 @@ var myVillage_controller = require('./modules/myVillage/myVillageController.js')
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to bezkoder application." });
+});
 app.use('/user', user_controller)
 app.use('/notification', notification_controller)
 app.use('/my-village', myVillage_controller)
