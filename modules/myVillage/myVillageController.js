@@ -2,12 +2,8 @@ var express = require('express')
 var router = express.Router()
 var MongoClient = require('mongodb').MongoClient;
 var myLogModule = require('../../utils/logger');
-var User = require('../../models/user.js');
-var url = 'mongodb://127.0.0.1:27017/';
+var url = process.env.MONGODB;
 var ObjectID = require('mongodb').ObjectID;
-// mongodb://localhost:27017
-
-
 
 // get All list
 router.get('/info', function (req, res) {

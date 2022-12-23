@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var port = 8000;
 var app = express();
 var multer  = require('multer')
+const dotenv = require('dotenv');
+dotenv.config();
 // var router = express.Router();
 var user_controller = require('./modules/user/userController.js');
 var notification_controller = require('./modules/notification/notificationController.js');
@@ -44,4 +46,5 @@ app.post('/upload', upload.single('profile-file'), function (req, res, next) {
 
 app.listen(port, () => {
 	console.log("Server listening on port " + port);
+  console.log(process.env.NODE_ENV)
   });
