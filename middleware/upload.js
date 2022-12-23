@@ -3,7 +3,8 @@ const GridFsStorage = require("multer-gridfs-storage").GridFsStorage;
 var MongoClient = require('mongoose');
 var crypto = require('crypto');
 var path = require('path');
-var url = `${process.env.MONGODB}/mydb`;
+var url = 'mongodb://127.0.0.1:27017/mydb';
+// var url = `${process.env.MONGODB}/mydb`;
 const promise = MongoClient.connect(url, { useNewUrlParser: true });
 
 //create storage object

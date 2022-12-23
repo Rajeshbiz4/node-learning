@@ -140,7 +140,7 @@ router.post('/authenticate', function (req, res) {
         response = { "error": true, "message": 'Authentication failed. Invalid user or password.' };
         return res.send(response);
       } else {
-        res.status(200).send( { data: result , token: jwt.sign({ mobile: result.mobile, firstName: result.firstName, lastName: result.lastName, password: result.password, _id: result._id }, 'RESTFULAPIs') });
+        res.status(200).send( { data: result , token: jwt.sign({ mobile: result.mobile,  password: result.password },  process.env.TOCKEN_SECRET)});
       }
       db.close();
     });

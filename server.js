@@ -6,12 +6,14 @@ var multer  = require('multer')
 const dotenv = require('dotenv');
 dotenv.config();
 // var router = express.Router();
+var authenticateToken = require('./middleware/authenticateToken.js');
 var user_controller = require('./modules/user/userController.js');
 var notification_controller = require('./modules/notification/notificationController.js');
 var myVillage_controller = require('./modules/myVillage/myVillageController.js');
 var image_upload = require('./modules/imageUpload/imageUploadController.js');
 var complaint_controller = require('./modules/complaint/complaintController.js');
 var gramBody_controller = require('./modules/gram-body/gram-bodyController.js');
+var auth_Controller = require('./modules/auth/authController.js');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -20,12 +22,13 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
-app.use('/user', user_controller)
-app.use('/notification', notification_controller)
-app.use('/my-village', myVillage_controller)
-app.use("/file", image_upload);
-app.use("/complaint", complaint_controller);
-app.use("/gram-body", gramBody_controller);
+app.use('/login', auth_Controller);
+app.use('/user', authenticateToken, user_controller);
+app.use('/notification',authenticateToken, notification_controller);
+app.use('/my-village', authenticateToken, myVillage_controller);
+app.use("/file", authenticateToken, image_upload);
+app.use("/complaint", authenticateToken, complaint_controller);
+app.use("/gram-body", authenticateToken, gramBody_controller);
 
 
 // upload image to folder
