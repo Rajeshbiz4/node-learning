@@ -3,17 +3,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // create a schema
-var notificationSchema = new Schema({
+var myVillageSchema = new Schema({
   title: { type: String, required: true },
-  notificatrion: { type: String, required: true },
-  type: { type: String, required: true },
+  description: { type: String, required: true },
+  image: { type: String, required: true },
   created_at: Date,
   updated_at: Date,
 });
 
 // the schema is useless so far
 // we need to create a model using it
-var notifications = mongoose.model('notifications', notificationSchema);
+var myVillage = mongoose.model('myVillage', myVillageSchema);
 
 // make this available to our users in our Node applications
-module.exports = notifications;
+module.exports = myVillage;

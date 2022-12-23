@@ -4,11 +4,13 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var userSchema = new Schema({
-  name: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   mobile: { type: String, required: true },
-  district: { type: String, required: true },
-  taluka: { type: String, required: true },
-  village: { type: String, required: true },
+  // password: { type: String, required: true },
+  // district: { type: String, required: true },
+  // taluka: { type: String, required: true },
+  // village: { type: String, required: true },
   created_at: Date,
   updated_at: Date,
 });

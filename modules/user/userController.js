@@ -4,29 +4,35 @@ var MongoClient = require('mongodb').MongoClient;
 var myLogModule = require('../../utils/logger');
 var User = require('../../models/user.js');
 var url = 'mongodb://127.0.0.1:27017/';
+var mypassModule = require('../../utils/utils');
+// mongodb://localhost:27017
 
 // Create new user
 router.post('/create', function (req, res) {
-  myLogModule.info('UserController API-UserList(user/create)')
+  myLogModule.info('UserController API-UserList(user/create)', req.body);
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
     var payload = {
-      "name": req.body.name,
+      "firstName": req.body.firstName,
+      "lastName": req.body.lastName,
       "mobile": req.body.mobile,
-      "district": req.body.district,
-      "taluka": req.body.taluka,
-      "village": req.body.village,
+      "password": mypassModule(5),
+      // "district": req.body.district,
+      // "taluka": req.body.taluka,
+      // "village": req.body.village,
+      created_at: new Date(),
+      updated_at: new Date(),
     }
     myLogModule.info('payload -- ' + JSON.stringify(payload))
     var myobj = payload
     dbo.collection("customers").insertOne(myobj, function (err, result) {
       if (err) {
-        myLogModule.error('error')
+        myLogModule.error('error', err)
         res.status(400).send({ message: 'error', data: err })
       } else {
         myLogModule.info('Sucess')
-        res.status(200).send({ message: 'document inserted', data: result })
+        res.status(200).send({ message: 'document inserted', data: payload })
       }
       db.close();
     });
@@ -36,7 +42,6 @@ router.post('/create', function (req, res) {
 // get All list
 router.get('/list', function (req, res) {
   myLogModule.info('UserController API-UserList(user/list)')
-  console.log('parms--', req.query)
   var pageNo = parseInt(req.query.from)
   var size = parseInt(req.query.size)
   var query = {}
@@ -71,20 +76,46 @@ router.get('/list', function (req, res) {
 })
 
 // Update one document
-router.post('/update', function (req, res) {
+router.put('/update', function (req, res) {
   myLogModule.info('UserController API-UserList(user/update)')
   MongoClient.connect(url, function (err, db) {
     var payload = {
-      "name": req.body.name
+      "_id": req.body.id
+    }
+    if (err) throw err;
+    var dbo = db.db("mydb");
+    var myquery = payload
+    var newvalues = { $set: { firstName: "YO Rajesh updated" } }
+    dbo.collection("customers").updateOne(myquery, newvalues, function (err, result) {
+      if (err) throw err;
+      myLogModule.info('User update sucessfully');
+      res.send(result);
+      db.close();
+    });
+  });
+})
+
+// Remove one document
+router.delete('/delete', function (req, res) {
+  myLogModule.info('UserController API-Delete(user/Delete)')
+  var id = parseInt(req.query.id)
+  if (!id) {
+    response = { "error": true, "message": "invalid page user id" };
+    return res.status(400).json(response)
+  }
+
+  MongoClient.connect(url, function (err, db) {
+    var payload = {
+      "_id":  id
     }
     if (err) throw err;
     var dbo = db.db("mydb");
     var myquery = payload
     var newvalues = { $set: { name: "YO Rajesh" } }
-    dbo.collection("customers").updateOne(myquery, newvalues, function (err, result) {
+    dbo.collection("customers").deleteOne(myquery, newvalues, function (err, result) {
       if (err) throw err;
-      myLogModule.info('User update sucessfully')
-      res.send("1 document updated")
+      myLogModule.info('User deleted sucessfully')
+      res.send("1 document deleted")
       db.close();
     });
   });

@@ -7,7 +7,8 @@ var url = 'mongodb://127.0.0.1:27017/';
 // Create new user
 router.post('/create', function (req, res) {
     myLogModule.info('Notification Controller')
-    MongoClient.connect(url, function (err, db) {
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+        myLogModule.info('connection')
         if (err) throw err;
         var dbo = db.db("mydb");
         var notification = req.body.notification
@@ -20,7 +21,9 @@ router.post('/create', function (req, res) {
         var payload = {
             "notification": notification,
             "title": title,
-            "type": type
+            "type": type,
+            "created_at": new Date(),
+            "updated_at":new Date()
         }
         myLogModule.info('payload -- ' + JSON.stringify(payload))
         var myobj = payload
@@ -36,5 +39,41 @@ router.post('/create', function (req, res) {
         });
     });
 })
+
+// get All Notifications
+router.get('/list', function (req, res) {
+    myLogModule.info('Notification API-NotifcationList(notifcation/list)')
+    var pageNo = parseInt(req.query.from)
+    var size = parseInt(req.query.size)
+    var query = {}
+    if (pageNo < 0 || pageNo === 0) {
+      response = { "error": true, "message": "invalid page number, should start with 1" };
+      return res.status(400).json(response)
+    }
+    query.skip = size * (pageNo - 1)
+    query.limit = size
+    MongoClient.connect(url, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("mydb");
+  
+     dbo.collection("notifications").find({}).count(function(err, count){
+          if(err){
+            console.log('Error while fatching count')
+          } else {
+            dbo.collection("notifications").find({}, query).toArray(function (err, result) {
+              if (err) throw err;
+              if (result) {
+                myLogModule.info('Notifcation Controller - Notifcation list fetched sucessfully')
+                res.status(200).json({ 'data': result, msg: 'Notifcation list fetched sucessfully', total: count })
+              } else {
+                myLogModule.error('Notifcation Controller - NO data found')
+                res.status(400).json({ data: err, msg: 'NO data found' })
+              }
+              db.close();
+            });
+          }
+        })
+    });
+  })
 
 module.exports = router
