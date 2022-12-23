@@ -4,10 +4,12 @@ var port = 8000;
 var app = express();
 var multer  = require('multer')
 // var router = express.Router();
-var user_controller = require('./modules/user/userController.js')
-var notification_controller = require('./modules/notification/notificationController.js')
-var myVillage_controller = require('./modules/myVillage/myVillageController.js')
-var image_upload = require('./modules/imageUpload/imageUploadController.js')
+var user_controller = require('./modules/user/userController.js');
+var notification_controller = require('./modules/notification/notificationController.js');
+var myVillage_controller = require('./modules/myVillage/myVillageController.js');
+var image_upload = require('./modules/imageUpload/imageUploadController.js');
+var complaint_controller = require('./modules/complaint/complaintController.js');
+var gramBody_controller = require('./modules/gram-body/gram-bodyController.js');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -20,6 +22,8 @@ app.use('/user', user_controller)
 app.use('/notification', notification_controller)
 app.use('/my-village', myVillage_controller)
 app.use("/file", image_upload);
+app.use("/complaint", complaint_controller);
+app.use("/gram-body", gramBody_controller);
 
 
 // upload image to folder
