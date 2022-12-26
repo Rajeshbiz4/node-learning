@@ -12,12 +12,7 @@ var ObjectID = require('mongodb').ObjectID;
 // Create new user
 router.post('/create', function (req, res) {
   myLogModule.info('UserController API-UserList(user/create)', req.body);
-  MongoClient.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
- },  function (err, db) {
+  MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
     var payload = {
