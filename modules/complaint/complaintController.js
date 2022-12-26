@@ -8,7 +8,12 @@ var ObjectID = require('mongodb').ObjectID;
 // Create new complaint
 router.post('/create', function (req, res) {
   myLogModule.info('ComplaintController API-create)');
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
     var payload = {
@@ -75,7 +80,12 @@ router.get('/list', function (req, res) {
 // Update one document
 router.put('/update', function (req, res) {
   myLogModule.info('ComplaintController API-update)')
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     var payload = {
       "_id": ObjectID(req.body.id)
     }
@@ -106,7 +116,12 @@ router.delete('/delete', function (req, res) {
     return res.status(400).json(response)
   }
 
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     var payload = {
       "_id":  id
     }

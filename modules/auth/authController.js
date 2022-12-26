@@ -12,7 +12,12 @@ var ObjectID = require('mongodb').ObjectID;
 // Authenticate user - Login API
 router.post('/', function (req, res) {
   myLogModule.info('UserController API-authenticate')
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     var payload = {
       "mobile": req.body.mobile
     }

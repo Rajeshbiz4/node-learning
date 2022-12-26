@@ -12,7 +12,12 @@ var ObjectID = require('mongodb').ObjectID;
 // Create new user
 router.post('/create', function (req, res) {
   myLogModule.info('UserController API-UserList(user/create)', req.body);
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ },  function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
     var payload = {
@@ -53,7 +58,12 @@ router.get('/list', function (req, res) {
   }
   query.skip = size * (pageNo - 1)
   query.limit = size
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     if (err) throw err;
     var dbo = db.db("mydb");
 
@@ -80,7 +90,12 @@ router.get('/list', function (req, res) {
 // Update one document
 router.put('/update', function (req, res) {
   myLogModule.info('UserController API-UserList(user/update)')
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     var payload = {
       "_id": ObjectID(req.body.id)
     }
@@ -106,7 +121,12 @@ router.delete('/delete', function (req, res) {
     return res.status(400).json(response)
   }
 
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     var payload = {
       "_id":  id
     }
@@ -151,7 +171,12 @@ router.post('/authenticate', function (req, res) {
 // change password
 router.put('/change-password', function (req, res) {
   myLogModule.info('UserController API-change-password(user/update)')
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+ }, function (err, db) {
     var payload = {
       "_id": ObjectID(req.body.id)
     }
