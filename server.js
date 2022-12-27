@@ -23,12 +23,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 app.use('/login', auth_Controller);
-app.use('/user', authenticateToken, user_controller);
-app.use('/notification',authenticateToken, notification_controller);
-app.use('/my-village', authenticateToken, myVillage_controller);
-app.use("/file", authenticateToken, image_upload);
-app.use("/complaint", authenticateToken, complaint_controller);
-app.use("/gram-body", authenticateToken, gramBody_controller);
+app.use('/user', user_controller);
+app.use('/notification',notification_controller);
+app.use('/my-village', myVillage_controller);
+app.use("/file", image_upload);
+app.use("/complaint", complaint_controller);
+app.use("/gram-body", gramBody_controller);
 
 
 // upload image to folder
