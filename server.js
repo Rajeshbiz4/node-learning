@@ -18,17 +18,19 @@ var auth_Controller = require('./modules/auth/authController.js');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+
+app.use('/uploads',express.static('uploads'))
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application.     - developed by Rajesh Pandhare" });
 });
 app.use('/login', auth_Controller);
-app.use('/user', user_controller);
-app.use('/notification',notification_controller);
-app.use('/my-village', myVillage_controller);
-app.use("/file", image_upload);
-app.use("/complaint", complaint_controller);
-app.use("/gram-body", gramBody_controller);
+app.use('/user', authenticateToken, user_controller);
+app.use('/notification',authenticateToken, notification_controller);
+app.use('/my-village', authenticateToken, myVillage_controller);
+app.use("/file", authenticateToken, image_upload);
+app.use("/complaint", authenticateToken, complaint_controller);
+app.use("/gram-body", authenticateToken, gramBody_controller);
 
 
 // upload image to folder
@@ -43,7 +45,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 app.post('/upload', upload.single('profile-file'), function (req, res, next) {
-  const imgUrl = `http://localhost:8000/uploads/${req.file.filename}`;
+  const imgUrl = `http://34.217.126.91:8000/uploads/${req.file.filename}`;
   return res.send(imgUrl)
 })
 
