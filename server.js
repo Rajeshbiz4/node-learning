@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to bezkoder application.     - developed by Rajesh Pandhare" });
 });
 app.use('/login', auth_Controller);
 app.use('/user', user_controller);
