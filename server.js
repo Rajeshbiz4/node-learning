@@ -15,6 +15,7 @@ var complaint_controller = require('./modules/complaint/complaintController.js')
 var gramBody_controller = require('./modules/gram-body/gram-bodyController.js');
 var auth_Controller = require('./modules/auth/authController.js');
 var feeds_Controller = require('./modules/feeds/feedsController.js');
+var menu_Controller = require('./modules/menu/menuController.js');
 var upload = require('./middleware/upload.js');
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -34,6 +35,7 @@ app.use("/file", authenticateToken, image_upload);
 app.use("/complaint", authenticateToken, complaint_controller);
 app.use("/gram-body", authenticateToken, gramBody_controller);
 app.use("/feeds", authenticateToken, feeds_Controller);
+app.use("/menu", menu_Controller);
 
 app.post('/upload', upload.single('profile-file'), function (req, res, next) {
   const imgUrl = `http://34.217.126.91:8000/uploads/${req.file.filename}`;
