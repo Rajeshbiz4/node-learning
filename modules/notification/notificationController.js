@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 var MongoClient = require('mongodb').MongoClient;
 var myLogModule = require('../../utils/logger');
-var url = process.env.MONGODB;
+var url = 'mongodb://localhost:27017';
 
 // Create new user
 router.post('/create', function (req, res) {
