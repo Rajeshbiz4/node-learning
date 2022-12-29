@@ -18,7 +18,7 @@ router.get('/list', function (req, res) {
         } else{
             const menu = [
                 { key : 'ग्रामपंचायत' , logoName : 'uploads/menu/home_icon.png'},
-                { key : 'पदाधिकारी' , logoName : 'uploads/menu/home_icon.png'},
+                { key : 'ग्रामपंचायत समिती' , logoName : 'uploads/menu/home_icon.png'},
                 { key : 'अधिकारी ' , logoName : 'uploads/menu/home_icon.png'},
                 { key : 'संदेश ' , logoName : 'uploads/menu/home_icon.png'},
                 { key : 'बातमीपत्र ' , logoName : 'uploads/menu/home_icon.png'},
